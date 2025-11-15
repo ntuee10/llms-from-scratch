@@ -1,0 +1,208 @@
+\chapter{理解大型語言模型}
+\label{ch:understanding-llms}
+
+% 章節摘要
+\begin{quote}
+本章介紹大型語言模型（LLM）的基本概念，包括它們的運作原理、應用場景，以及為什麼要從零開始打造自己的 LLM。
+\end{quote}
+
+\section{什麼是大型語言模型？}
+
+\term{大型語言模型}{Large Language Model, LLM} 是一種基於深度學習的人工智慧模型，專門用於理解和生成自然語言文字。這些模型透過在大量文字資料上進行訓練，學習語言的模式、結構和語義。
+
+\subsection{LLM 的關鍵特徵}
+
+大型語言模型具有以下關鍵特徵：
+
+\begin{itemize}
+    \item \textbf{規模龐大}：通常包含數億到數千億個參數
+    \item \textbf{自監督學習}：從未標記的文字資料中學習
+    \item \textbf{情境學習}：能夠根據上下文理解和生成文字
+    \item \textbf{少樣本學習}：僅需少量範例即可執行新任務
+    \item \textbf{泛用性}：可應用於多種不同的自然語言處理任務
+\end{itemize}
+
+\subsection{LLM 的演進歷程}
+
+圖 \ref{fig:llm-timeline} 展示了大型語言模型的發展歷程。
+
+\begin{figure}[H]
+    \centering
+    % 此處將包含時間軸圖片
+    % \includegraphics[width=0.9\textwidth]{ch01/llm-timeline.pdf}
+    \caption{大型語言模型的發展時間軸}
+    \label{fig:llm-timeline}
+\end{figure}
+
+\section{LLM 的運作原理}
+
+\subsection{基本架構}
+
+現代 LLM 大多基於 \term{Transformer}{Transformer} 架構，這是一種於 2017 年提出的深度學習架構。Transformer 的核心是 \term{注意力機制}{Attention Mechanism}，它能讓模型關注輸入序列中的重要部分。
+
+\begin{definition}[Transformer 架構]
+Transformer 是一種序列到序列模型架構，主要由以下元件組成：
+\begin{itemize}
+    \item 自注意力層（Self-Attention Layer）
+    \item 前饋神經網路（Feed-Forward Network）
+    \item 層正規化（Layer Normalization）
+    \item 殘差連接（Residual Connection）
+\end{itemize}
+\end{definition}
+
+\subsection{訓練過程}
+
+LLM 的訓練通常分為兩個階段：
+
+\begin{enumerate}
+    \item \textbf{預訓練（Pre-training）}：
+    \begin{itemize}
+        \item 在大量未標記文字上訓練
+        \item 學習語言的一般模式和知識
+        \item 使用自監督學習目標，如下一標記預測
+    \end{itemize}
+
+    \item \textbf{微調（Fine-tuning）}：
+    \begin{itemize}
+        \item 在特定任務的資料上進一步訓練
+        \item 調整模型以適應特定應用
+        \item 可能包括指令微調或基於人類回饋的強化學習
+    \end{itemize}
+\end{enumerate}
+
+\section{為什麼要從零開始打造 LLM？}
+
+\subsection{學習目標}
+
+從零開始實作 LLM 有以下好處：
+
+\begin{itemize}
+    \item \textbf{深入理解}：透過實作理解每個元件的運作方式
+    \item \textbf{靈活性}：能夠根據需求自訂模型架構
+    \item \textbf{除錯能力}：更容易診斷和解決問題
+    \item \textbf{最佳化}：可針對特定用例進行效能最佳化
+\end{itemize}
+
+\begin{example}[教育用 LLM]
+本書將引導您建立一個小型但功能完整的 GPT 模型，包含：
+\begin{itemize}
+    \item 約 124M 參數（與 GPT-2 small 相當）
+    \item 可在一般筆記型電腦上訓練
+    \item 能夠生成連貫的文字
+    \item 可載入預訓練權重進行微調
+\end{itemize}
+\end{example}
+
+\subsection{實用考量}
+
+雖然訓練大型的生產級 LLM 需要龐大的計算資源，但從零開始打造較小的模型仍然非常實用：
+
+\begin{itemize}
+    \item 可用於特定領域的應用
+    \item 適合資源受限的環境
+    \item 便於實驗和研究新的架構
+    \item 有助於理解和評估現有的大型模型
+\end{itemize}
+
+\section{本書概覽}
+
+本書將帶領您完成以下學習旅程：
+
+\subsection{章節架構}
+
+\begin{description}
+    \item[第 2 章] 處理文字資料 --- 學習如何將文字轉換為模型可處理的格式
+    \item[第 3 章] 編寫注意力機制 --- 實作 Transformer 的核心元件
+    \item[第 4 章] 從零開始實作 GPT 模型 --- 組合各個元件建立完整模型
+    \item[第 5 章] 使用未標記資料進行預訓練 --- 訓練模型學習語言模式
+    \item[第 6 章] 針對文字分類進行微調 --- 將模型應用於特定任務
+    \item[第 7 章] 針對遵循指令進行微調 --- 訓練模型理解和執行指令
+\end{description}
+
+\subsection{學習路徑}
+
+圖 \ref{fig:mental-model} 展示了本書涵蓋的內容架構。
+
+\begin{figure}[H]
+    \centering
+    % \includegraphics[width=0.8\textwidth]{ch01/mental-model.jpg}
+    \caption{LLM 開發的心智模型}
+    \label{fig:mental-model}
+\end{figure}
+
+\section{先備知識}
+
+\subsection{必要的背景知識}
+
+要充分利用本書，您需要具備：
+
+\begin{itemize}
+    \item \textbf{Python 程式設計}：紮實的 Python 基礎
+    \item \textbf{基礎數學}：線性代數、微積分和機率論的基本概念
+    \item \textbf{（可選）深度學習}：有神經網路的基礎會有幫助
+\end{itemize}
+
+\subsection{PyTorch 基礎}
+
+本書使用 PyTorch 作為深度學習框架。如果您不熟悉 PyTorch，附錄 A 提供了快速入門指南。
+
+\begin{remark}
+即使您是 PyTorch 新手，也可以跟隨本書學習。所有程式碼都有詳細的解釋，並且逐步建構。
+\end{remark}
+
+\section{開發環境設定}
+
+\subsection{硬體需求}
+
+本書的程式碼設計為可在一般筆記型電腦上執行：
+
+\begin{itemize}
+    \item \textbf{CPU}：現代多核心處理器
+    \item \textbf{RAM}：至少 8GB（建議 16GB）
+    \item \textbf{GPU}：可選，但會大幅加速訓練
+    \item \textbf{儲存空間}：至少 10GB 可用空間
+\end{itemize}
+
+\subsection{軟體需求}
+
+您需要安裝以下軟體：
+
+\begin{itemize}
+    \item Python 3.10 或更高版本
+    \item PyTorch
+    \item 其他 Python 套件（詳見 \texttt{requirements.txt}）
+\end{itemize}
+
+詳細的安裝指南請參閱 \texttt{setup} 目錄。
+
+\section{本章小結}
+
+本章介紹了：
+
+\begin{itemize}
+    \item 大型語言模型的基本概念和特徵
+    \item LLM 的運作原理和訓練過程
+    \item 從零開始實作 LLM 的價值和意義
+    \item 本書的架構和學習路徑
+    \item 必要的先備知識和開發環境設定
+\end{itemize}
+
+在下一章中，我們將開始處理文字資料，學習如何將原始文字轉換為模型可以理解的數值表示。
+
+\subsection{延伸閱讀}
+
+\begin{itemize}
+    \item Vaswani et al., "Attention is All You Need" (2017)
+    \item Radford et al., "Language Models are Unsupervised Multitask Learners" (2019)
+    \item Brown et al., "Language Models are Few-Shot Learners" (2020)
+\end{itemize}
+
+\subsection{練習題}
+
+本章無程式碼練習。建議：
+
+\begin{enumerate}
+    \item 研究並比較不同的大型語言模型（如 GPT、BERT、T5）
+    \item 探索 LLM 的應用案例
+    \item 設定您的開發環境並確認可以執行 PyTorch 程式碼
+\end{enumerate}

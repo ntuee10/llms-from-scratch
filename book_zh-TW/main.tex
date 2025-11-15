@@ -1,0 +1,305 @@
+% 從零開始打造大型語言模型（繁體中文版）
+% Build a Large Language Model (From Scratch) - Traditional Chinese Edition
+% Original Author: Sebastian Raschka
+% Translation assisted by: Claude Code (Anthropic)
+
+\documentclass[12pt,a4paper,openany]{book}
+
+% ===== 中文支援 =====
+\usepackage{xeCJK}
+\usepackage{fontspec}
+
+% 設定中文字型（需根據系統安裝的字型調整）
+\setCJKmainfont{Noto Serif CJK TC}  % 主要字型：思源宋體
+\setCJKsansfont{Noto Sans CJK TC}   % 無襯線字型：思源黑體
+\setCJKmonofont{Noto Sans Mono CJK TC}  % 等寬字型
+
+% 設定英文字型
+\setmainfont{Libertinus Serif}
+\setsansfont{Libertinus Sans}
+\setmonofont{JetBrains Mono}
+
+% ===== 頁面設定 =====
+\usepackage[
+    a4paper,
+    top=2.5cm,
+    bottom=2.5cm,
+    left=3cm,
+    right=2.5cm,
+    headheight=15pt
+]{geometry}
+
+% ===== 程式碼高亮 =====
+\usepackage{minted}
+\usemintedstyle{friendly}
+
+% 程式碼區塊設定
+\setminted{
+    frame=lines,
+    framesep=2mm,
+    baselinestretch=1.2,
+    bgcolor=lightgray!10,
+    fontsize=\small,
+    linenos=true,
+    breaklines=true,
+    breakanywhere=false,
+    autogobble=true
+}
+
+% 行內程式碼設定
+\newmintinline[pyinline]{python}{bgcolor=lightgray!20}
+\newmintinline[bashinline]{bash}{bgcolor=lightgray!20}
+
+% ===== 數學支援 =====
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsthm}
+
+% ===== 圖片支援 =====
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{subfig}
+\graphicspath{{./figures/}}
+
+% ===== 表格支援 =====
+\usepackage{booktabs}
+\usepackage{tabularx}
+\usepackage{longtable}
+\usepackage{multirow}
+
+% ===== 顏色支援 =====
+\usepackage{xcolor}
+\definecolor{linkcolor}{RGB}{0,102,204}
+\definecolor{citecolor}{RGB}{153,51,153}
+\definecolor{urlcolor}{RGB}{0,153,153}
+
+% ===== 超連結支援 =====
+\usepackage[
+    colorlinks=true,
+    linkcolor=linkcolor,
+    citecolor=citecolor,
+    urlcolor=urlcolor,
+    bookmarks=true,
+    bookmarksopen=true,
+    bookmarksnumbered=true,
+    pdfauthor={Sebastian Raschka (原作), Claude Code (翻譯輔助)},
+    pdftitle={從零開始打造大型語言模型},
+    pdfsubject={Large Language Models, Deep Learning, PyTorch},
+    pdfkeywords={LLM, GPT, Transformer, AI, Machine Learning}
+]{hyperref}
+
+% ===== 目錄設定 =====
+\usepackage{tocloft}
+\setcounter{tocdepth}{2}
+\setcounter{secnumdepth}{3}
+
+% ===== 頁首頁尾 =====
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[LE]{\leftmark}
+\fancyhead[RO]{\rightmark}
+\fancyfoot[C]{\thepage}
+\renewcommand{\headrulewidth}{0.4pt}
+\renewcommand{\footrulewidth}{0pt}
+
+% ===== 列表設定 =====
+\usepackage{enumitem}
+\setlist{nosep, leftmargin=*}
+
+% ===== 引用格式 =====
+\usepackage[style=apa,backend=biber]{biblatex}
+\addbibresource{references.bib}
+
+% ===== 索引支援 =====
+\usepackage{makeidx}
+\makeindex
+
+% ===== 演算法支援 =====
+\usepackage{algorithm}
+\usepackage{algpseudocode}
+
+% ===== 程式碼清單 =====
+\usepackage{listings}
+\lstset{
+    basicstyle=\ttfamily\small,
+    breaklines=true,
+    frame=single,
+    backgroundcolor=\color{lightgray!10}
+}
+
+% ===== 自訂命令 =====
+% 程式碼檔案包含
+\newcommand{\includecode}[3][python]{
+    \begin{listing}[H]
+    \caption{#3}
+    \inputminted[linenos,frame=lines,framesep=2mm]{#1}{#2}
+    \end{listing}
+}
+
+% 重點強調
+\newcommand{\important}[1]{\textcolor{red}{\textbf{#1}}}
+\newcommand{\note}[1]{\textcolor{blue}{\textit{注意：#1}}}
+
+% 術語標註（首次出現時顯示英文）
+\newcommand{\term}[2]{#1（\textit{#2}）}
+
+% ===== 定理環境 =====
+\newtheorem{theorem}{定理}[chapter]
+\newtheorem{lemma}[theorem]{引理}
+\newtheorem{proposition}[theorem]{命題}
+\newtheorem{corollary}[theorem]{推論}
+\newtheorem{definition}{定義}[chapter]
+\newtheorem{example}{範例}[chapter]
+\newtheorem{remark}{註記}[chapter]
+
+% ===== 文件資訊 =====
+\title{
+    {\Huge\bfseries 從零開始打造大型語言模型}\\[1cm]
+    {\Large Build a Large Language Model (From Scratch)}\\[0.5cm]
+    {\large 繁體中文版（台灣）}
+}
+\author{
+    {\large 原著：Sebastian Raschka}\\[0.3cm]
+    {\normalsize 出版社：Manning Publications}\\[0.3cm]
+    {\normalsize 翻譯輔助：Claude Code (Anthropic)}
+}
+\date{\today}
+
+% ===== 文件開始 =====
+\begin{document}
+
+% 封面
+\frontmatter
+\maketitle
+
+% 版權頁
+\newpage
+\thispagestyle{empty}
+\vspace*{\fill}
+\begin{center}
+\begin{minipage}{0.8\textwidth}
+    \textbf{從零開始打造大型語言模型（繁體中文版）}\\[0.5cm]
+
+    \textbf{原作資訊：}\\
+    原著：Sebastian Raschka\\
+    出版社：Manning Publications\\
+    ISBN：978-1633437166\\
+    出版日期：2024年9月12日\\
+    原始儲存庫：\url{https://github.com/rasbt/LLMs-from-scratch}\\[0.5cm]
+
+    \textbf{翻譯資訊：}\\
+    翻譯版本：繁體中文（台灣）\\
+    翻譯輔助工具：Claude Code（Anthropic）\\
+    翻譯日期：2025年11月\\[0.5cm]
+
+    \textbf{授權：}\\
+    原著內容版權歸 Sebastian Raschka 和 Manning Publications 所有\\
+    翻譯內容遵循原著的 Apache-2.0 授權\\[0.5cm]
+
+    \textbf{致謝：}\\
+    本翻譯專案特別感謝原作者 Sebastian Raschka 提供如此優質的技術書籍，\\
+    感謝 Manning Publications 授權和出版原著，\\
+    以及 Claude Code（Anthropic）協助進行高品質翻譯。\\[0.5cm]
+
+    \textbf{聲明：}\\
+    本翻譯堅持高標準，確保技術準確性和可讀性，\\
+    為台灣讀者提供優質的學習資源。\\
+    所有技術術語均採用台灣標準用語。
+\end{minipage}
+\end{center}
+\vspace*{\fill}
+
+% 序言
+\chapter*{繁體中文版序言}
+\addcontentsline{toc}{chapter}{繁體中文版序言}
+
+本書是 Sebastian Raschka 所著《Build a Large Language Model (From Scratch)》的繁體中文（台灣）翻譯版本。本翻譯專案的目標是為台灣讀者提供高品質、準確且易讀的中文版本，協助更多人深入理解大型語言模型的運作原理。
+
+\section*{關於本翻譯}
+
+本翻譯遵循以下原則：
+
+\begin{itemize}
+    \item \textbf{準確性優先}：忠實於原文內容，確保技術細節的正確性
+    \item \textbf{台灣術語標準}：使用台灣資訊工程界通用的專業術語
+    \item \textbf{術語一致性}：維護統一的術語表，確保全書用詞一致
+    \item \textbf{可讀性}：採用符合中文閱讀習慣的表達方式
+    \item \textbf{完整性}：保留所有原文資訊，包括程式碼、圖表和參考資料
+\end{itemize}
+
+\section*{如何使用本書}
+
+本書適合：
+\begin{itemize}
+    \item 想要深入理解 LLM 運作原理的開發者
+    \item 希望從零開始實作 GPT 模型的工程師
+    \item 對深度學習和自然語言處理有興趣的研究人員
+    \item 想要學習 PyTorch 實作技巧的學習者
+\end{itemize}
+
+\section*{程式碼與資源}
+
+所有程式碼範例均可在原作者的 GitHub 儲存庫中找到：
+\url{https://github.com/rasbt/LLMs-from-scratch}
+
+本翻譯專案的相關資源：
+\begin{itemize}
+    \item 術語對照表：\texttt{TERMINOLOGY\_GLOSSARY.zh-TW.md}
+    \item 翻譯指南：\texttt{TRANSLATION\_GUIDELINES.zh-TW.md}
+\end{itemize}
+
+\vspace{1cm}
+\noindent
+翻譯團隊\\
+2025年11月
+
+% 目錄
+\tableofcontents
+\listoffigures
+\listoftables
+\listoflistings
+
+% 主要內容
+\mainmatter
+
+% 第 1 章
+\include{chapters/ch01}
+
+% 第 2 章
+\include{chapters/ch02}
+
+% 第 3 章
+\include{chapters/ch03}
+
+% 第 4 章
+\include{chapters/ch04}
+
+% 第 5 章
+\include{chapters/ch05}
+
+% 第 6 章
+\include{chapters/ch06}
+
+% 第 7 章
+\include{chapters/ch07}
+
+% 附錄
+\appendix
+
+\include{chapters/appendix-A}
+\include{chapters/appendix-B}
+\include{chapters/appendix-C}
+\include{chapters/appendix-D}
+\include{chapters/appendix-E}
+
+% 後記
+\backmatter
+
+% 參考文獻
+\printbibliography[heading=bibintoc,title={參考文獻}]
+
+% 索引
+\printindex
+
+\end{document}
